@@ -8,6 +8,11 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Test') {
+            steps {
+                bat 'findstr /C:"Welcome to My DevOps Project" index.html'
+    }
+}
 
         stage('Deploy to Ubuntu') {
             steps {
