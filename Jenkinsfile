@@ -8,11 +8,12 @@ pipeline {
                 checkout scm
             }
         }
+
         stage('Test') {
             steps {
                 bat 'findstr /C:"Welcome to My DevOps Project" index.html'
-    }
-}
+            }
+        }
 
         stage('Deploy to Ubuntu') {
             steps {
@@ -24,5 +25,18 @@ pipeline {
                 }
             }
         }
+
+        stage('Verify Deployment') {
+            steps {
+                sshagent(['37b968a4-0835-45fd-9586-ed0cfa8c85ea']) {
+                    bat '''
+                    ssh -o StrictHostKeyChecking=no sara@172.20.232.68 "curl -f http://localhost"
+                    '''
+                }
+            }
+        }
     }
 }
+
+
+        
