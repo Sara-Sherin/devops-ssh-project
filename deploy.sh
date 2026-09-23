@@ -2,8 +2,9 @@
 
 echo "Starting deployment..."
 
-sudo cp index.html /var/www/html/index.html
+sudo /usr/bin/cp /home/sara/devops-ssh-project/index.html /var/www/html/index.html
 
-sudo systemctl reload nginx
+sudo /usr/bin/systemctl reload nginx
 
 echo "Deployment completed successfully!"
+
