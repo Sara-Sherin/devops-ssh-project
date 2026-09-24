@@ -1,46 +1,53 @@
 pipeline {
-    agent any
+agent any
 
-    stages {
+```
+stages {
 
-        stage('Checkout') {
-            steps {
-                checkout scm
+    stage('Checkout') {
+        steps {
+            checkout scm
+        }
+    }
+
+    stage('Test') {
+        steps {
+            bat 'findstr /C:"Welcome to My DevOps Project" index.html'
+        }
+    }
+
+    stage('Docker Build') {
+        steps {
+            sshagent(['37b968a4-0835-45fd-9586-ed0cfa8c85ea']) {
+                bat '''
+                scp -o StrictHostKeyChecking=no Dockerfile index.html sara@172.20.232.68:/home/sara/devops-ssh-project/
+                ssh -o StrictHostKeyChecking=no sara@172.20.232.68 "cd /home/sara/devops-ssh-project && docker build -t devops-website ."
+                '''
             }
         }
+    }
 
-        stage('Test') {
-            steps {
-                bat 'findstr /C:"Welcome to My DevOps Project" index.html'
+    stage('Deploy Docker Container') {
+        steps {
+            sshagent(['37b968a4-0835-45fd-9586-ed0cfa8c85ea']) {
+                bat '''
+                ssh -o StrictHostKeyChecking=no sara@172.20.232.68 "docker rm -f devops-website-container 2>/dev/null || true"
+                ssh -o StrictHostKeyChecking=no sara@172.20.232.68 "docker run -d --name devops-website-container -p 8090:80 devops-website"
+                '''
             }
         }
+    }
 
-        stage('Docker Build') {
-            steps {
-                bat 'docker build -t devops-website .'
-            }
-        }
-
-        stage('Deploy to Ubuntu') {
-            steps {
-                sshagent(['37b968a4-0835-45fd-9586-ed0cfa8c85ea']) {
-                    bat '''
-                    scp -o StrictHostKeyChecking=no index.html sara@172.20.232.68:/home/sara/devops-ssh-project/index.html
-                    ssh -o StrictHostKeyChecking=no sara@172.20.232.68 "cd /home/sara/devops-ssh-project && ./deploy.sh"
-                    '''
-                }
-            }
-        }
-
-        stage('Verify Deployment') {
-            steps {
-                sshagent(['37b968a4-0835-45fd-9586-ed0cfa8c85ea']) {
-                    bat '''
-                    ssh -o StrictHostKeyChecking=no sara@172.20.232.68 "curl -f http://localhost"
-                    '''
-                }
+    stage('Verify Deployment') {
+        steps {
+            sshagent(['37b968a4-0835-45fd-9586-ed0cfa8c85ea']) {
+                bat '''
+                ssh -o StrictHostKeyChecking=no sara@172.20.232.68 "curl -f http://localhost:8090"
+                '''
             }
         }
     }
 }
+```
 
+}
