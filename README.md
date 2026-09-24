@@ -1,35 +1,57 @@
-# DevOps SSH Deployment Project
+# DevOps CI/CD Project
 
-## Project Overview
+A beginner-friendly DevOps CI/CD project that automatically tests, builds, pushes, and deploys a Dockerized website using GitHub and Jenkins.
 
-This is a beginner DevOps project that demonstrates how to deploy a website on a Linux server using SSH, Nginx, Git, GitHub, and Bash scripting.
+## Architecture
+
+GitHub
+↓
+Jenkins Pipeline
+↓
+Checkout
+↓
+Test
+↓
+Docker Build
+↓
+Docker Hub
+↓
+Ubuntu Server
+↓
+Docker Container
+↓
+Website
 
 ## Technologies Used
 
-- Linux (Ubuntu WSL)
-- SSH
-- Nginx
 - Git
 - GitHub
+- Jenkins
+- Jenkins Pipeline
+- Docker
+- Docker Hub
+- Linux / Ubuntu
+- SSH
+- Nginx
 - Bash
 
-## Project Workflow
+## Pipeline Stages
 
-Developer → Git → GitHub → SSH → Linux → Nginx → Website
+1. Checkout source code from GitHub
+2. Test the HTML file
+3. Build Docker image
+4. Push Docker image to Docker Hub
+5. Deploy Docker container on Ubuntu
+6. Verify the website using curl
 
-## Features
+## Docker Image
 
-- Created a simple HTML website
-- Connected to Ubuntu Linux using SSH from Windows PowerShell
-- Installed and configured Nginx
-- Deployed the website using Nginx
-- Managed source code using Git and GitHub
-- Created a Bash deployment script
-- Updated and redeployed Version 2 of the website
+sara567/devops-website:latest
 
-## Deployment
+## Application URL
 
-The website can be deployed using:
+http://172.20.232.68:8090
 
-```bash
-./deploy.sh
+## Project Result
+
+The website can be updated through GitHub and deployed using the Jenkins CI/CD pipeline.
