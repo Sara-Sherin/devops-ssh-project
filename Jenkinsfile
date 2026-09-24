@@ -14,7 +14,11 @@ pipeline {
                 bat 'findstr /C:"Welcome to My DevOps Project" index.html'
             }
         }
-
+       stage('Docker Build') {
+           steps {
+               bat 'docker build -t devops-website .'
+            }
+        }
         stage('Deploy to Ubuntu') {
             steps {
                 sshagent(['37b968a4-0835-45fd-9586-ed0cfa8c85ea']) {
